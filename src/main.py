@@ -1,15 +1,17 @@
 import websocket
 import uuid
-import json, base64
+import json
 import urllib.request
 import urllib.parse
 import runpod
 
+import util
+
 
 server_address = "127.0.0.1:8188"
-client_id = str(uuid.uuid4())
 
-def queue_prompt(prompt, prompt_id):
+
+def queue_prompt(prompt, prompt_id, client_id):
   p = {"prompt": prompt, "client_id": client_id, "prompt_id": prompt_id}
   data = json.dumps(p).encode('utf-8')
   req = urllib.request.Request("http://{}/prompt".format(server_address), data=data)
@@ -25,9 +27,9 @@ def get_history(prompt_id):
   with urllib.request.urlopen("http://{}/history/{}".format(server_address, prompt_id)) as response:
     return json.loads(response.read())
 
-def get_images(ws, prompt):
+def get_images(ws, prompt, client_id):
   prompt_id = str(uuid.uuid4())
-  queue_prompt(prompt, prompt_id)
+  queue_prompt(prompt, prompt_id, client_id)
   output_images = {}
   while True:
     out = ws.recv()
@@ -60,28 +62,68 @@ def get_images(ws, prompt):
   return output_images
 
 
+def run(prompt):
+  client_id = str(uuid.uuid4())
+  ws = websocket.WebSocket()
+  ws.connect("ws://{}/ws?clientId={}".format(server_address, client_id))
+  images = get_images(ws, prompt, client_id)
+  ws.close()
+  return images
+
+
+def handle_mp4(input):
+  with open('prompt/mp4.json', 'r', encoding='utf-8') as f:
+    prompt = json.load(f)
+  prompt['6']['inputs']['text'] = input['prompt']
+
+  image_bytes = util.b64_to_bytes(input['image'])
+  file_id = str(uuid.uuid4())
+  file_name = f'{file_id}.png'
+  with open(f'/workspace/ComfyUI/input/{file_name}', 'wb') as f:
+    f.write(image_bytes)
+  prompt['52']['inputs']['image'] = file_name
+
+  output = run(prompt)
+  return {
+    'output': util.bytes_to_b64(output['28'][0])
+  }
+
+
+def handle_sample(input):
+  with open('prompt/sample.json', 'r', encoding='utf-8') as f:
+    prompt = json.load(f)
+  prompt['6']['inputs']['text'] = input['prompt']
+  
+  output = run(prompt)
+  return {
+    'output': util.bytes_to_b64(output['9'][0])
+  }
+
+
 def handler(job):
   input = job['input']
   if input['prompt_id'] == 'sample':
-    filename = 'src/prompt_sample.json'
+    return handle_sample(input)
   elif input['prompt_id'] == 'mp4':
-    filename = 'src/prompt_mp4.json'
+    return handle_mp4(input)
   else:
     return {'error': 'Invalid prompt id'}
-  with open(filename, 'r', encoding='utf-8') as f:
-    prompt = json.load(f)
-  ws = websocket.WebSocket()
-  ws.connect("ws://{}/ws?clientId={}".format(server_address, client_id))
-  images = get_images(ws, prompt)
-  ws.close()
+  # with open(filename, 'r', encoding='utf-8') as f:
+  #   prompt = json.load(f)
 
-  data = images['9'][0]
-  b64_data = base64.b64encode(data).decode('utf-8')
+  # client_id = str(uuid.uuid4())
+  # ws = websocket.WebSocket()
+  # ws.connect("ws://{}/ws?clientId={}".format(server_address, client_id))
+  # images = get_images(ws, prompt, client_id)
+  # ws.close()
 
-  print('b64_data', b64_data)
-  return {
-    'image': b64_data,
-  }
+  # data = images['9'][0]
+  # b64_data = base64.b64encode(data).decode('utf-8')
+
+  # print('b64_data', b64_data)
+  # return {
+  #   'image': b64_data,
+  # }
 
 if __name__ == '__main__':
   runpod.serverless.start({'handler': handler })
