@@ -77,6 +77,8 @@ def handler(job):
 
   data = images['9']
   b64_data = base64.b64encode(data).decode('utf-8')
+
+  print('b64_data', b64_data)
   return {
     'image': b64_data,
   }
