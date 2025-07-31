@@ -1,0 +1,256 @@
+{
+  "3": {
+    "inputs": {
+      "seed": 82068129188805,
+      "steps": 30,
+      "cfg": 5.8,
+      "sampler_name": "uni_pc",
+      "scheduler": "normal",
+      "denoise": 1,
+      "model": [
+        "54",
+        0
+      ],
+      "positive": [
+        "50",
+        0
+      ],
+      "negative": [
+        "50",
+        1
+      ],
+      "latent_image": [
+        "50",
+        2
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "K采样器"
+    }
+  },
+  "6": {
+    "inputs": {
+      "text": "slow turn, seductive eyes, mouth slightly agape, moaning deeply，nsfwsks",
+      "clip": [
+        "80",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Positive Prompt)"
+    }
+  },
+  "7": {
+    "inputs": {
+      "text": "Bright tones, overexposed, static, blurred details, static, overall gray, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, messy background, three legs, walking backwards, watermark, text, signature，The camera moves out of the picture,Clothing that cannot be removed,The range of motion is excessive,The range of motion is too small,Vagina growing outside the body",
+      "clip": [
+        "80",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Negative Prompt)"
+    }
+  },
+  "8": {
+    "inputs": {
+      "samples": [
+        "3",
+        0
+      ],
+      "vae": [
+        "39",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE解码"
+    }
+  },
+  "28": {
+    "inputs": {
+      "filename_prefix": "ComfyUI",
+      "fps": 16.000000000000004,
+      "lossless": false,
+      "quality": 100,
+      "method": "default",
+      "images": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "SaveAnimatedWEBP",
+    "_meta": {
+      "title": "保存动画（WEBP）"
+    }
+  },
+  "39": {
+    "inputs": {
+      "vae_name": "wan_2.1_vae.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "加载VAE"
+    }
+  },
+  "49": {
+    "inputs": {
+      "clip_name": "clip_vision_h.safetensors"
+    },
+    "class_type": "CLIPVisionLoader",
+    "_meta": {
+      "title": "加载CLIP视觉"
+    }
+  },
+  "50": {
+    "inputs": {
+      "width": 512,
+      "height": 768,
+      "length": 49,
+      "batch_size": 1,
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "vae": [
+        "39",
+        0
+      ],
+      "clip_vision_output": [
+        "51",
+        0
+      ],
+      "start_image": [
+        "52",
+        0
+      ]
+    },
+    "class_type": "WanImageToVideo",
+    "_meta": {
+      "title": "Wan图像到视频"
+    }
+  },
+  "51": {
+    "inputs": {
+      "crop": "none",
+      "clip_vision": [
+        "49",
+        0
+      ],
+      "image": [
+        "52",
+        0
+      ]
+    },
+    "class_type": "CLIPVisionEncode",
+    "_meta": {
+      "title": "CLIP视觉编码"
+    }
+  },
+  "52": {
+    "inputs": {
+      "image": "example.png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "加载图像"
+    }
+  },
+  "54": {
+    "inputs": {
+      "shift": 8,
+      "model": [
+        "61",
+        0
+      ]
+    },
+    "class_type": "ModelSamplingSD3",
+    "_meta": {
+      "title": "采样算法（SD3）"
+    }
+  },
+  "55": {
+    "inputs": {
+      "unet_name": "wan2.1_i2v_480p_14B_fp16.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "UNet加载器"
+    }
+  },
+  "59": {
+    "inputs": {
+      "clip_name": "umt5_xxl_fp16.safetensors",
+      "type": "wan",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "加载CLIP"
+    }
+  },
+  "61": {
+    "inputs": {
+      "model_type": "wan2.1_i2v_480p_14B",
+      "rel_l1_thresh": 0.30000000000000004,
+      "start_percent": 0,
+      "end_percent": 1,
+      "cache_device": "cuda",
+      "model": [
+        "80",
+        0
+      ]
+    },
+    "class_type": "TeaCache",
+    "_meta": {
+      "title": "TeaCache"
+    }
+  },
+  "78": {
+    "inputs": {
+      "lora_name": "BoobPhysics_WAN_v6.safetensors",
+      "strength_model": 0.5000000000000001,
+      "strength_clip": 0.5000000000000001,
+      "model": [
+        "55",
+        0
+      ],
+      "clip": [
+        "59",
+        0
+      ]
+    },
+    "class_type": "LoraLoader",
+    "_meta": {
+      "title": "加载LoRA"
+    }
+  },
+  "80": {
+    "inputs": {
+      "lora_name": "wan-nsfw-e14-fixed.safetensors",
+      "strength_model": 1.0000000000000002,
+      "strength_clip": 1.0000000000000002,
+      "model": [
+        "78",
+        0
+      ],
+      "clip": [
+        "78",
+        1
+      ]
+    },
+    "class_type": "LoraLoader",
+    "_meta": {
+      "title": "加载LoRA"
+    }
+  }
+}
