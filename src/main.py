@@ -61,9 +61,9 @@ def get_images(ws, prompt):
 def handler(job):
   input = job['input']
   if input['prompt_id'] == 'sample':
-    filename = 'prompt_sample.json'
+    filename = 'src/prompt_sample.json'
   elif input['prompt_id'] == 'mp4':
-    filename = 'prompt_mp4.json'
+    filename = 'src/prompt_mp4.json'
   else:
     return {'error': 'Invalid prompt id'}
   with open(filename, 'r', encoding='utf-8') as f:
