@@ -59,7 +59,7 @@ def get_images(ws, prompt):
 
 
 def handler(job):
-  intput = job['input']
+  input = job['input']
   if input['prompt_id'] == 'sample':
     filename = 'prompt_sample.json'
   elif input['prompt_id'] == 'mp4':
