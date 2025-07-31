@@ -1,6 +1,6 @@
 import websocket
 import uuid
-import json
+import json, base64
 import urllib.request
 import urllib.parse
 import runpod
@@ -74,8 +74,12 @@ def handler(job):
   ws.connect("ws://{}/ws?clientId={}".format(server_address, client_id))
   images = get_images(ws, prompt)
   ws.close()
-  
-  return images
+
+  data = images['9']
+  b64_data = base64.b64encode(data).decode('utf-8')
+  return {
+    'image': b64_data,
+  }
 
 if __name__ == '__main__':
   runpod.serverless.start({'handler': handler })
