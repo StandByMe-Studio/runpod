@@ -75,7 +75,7 @@ def handler(job):
   images = get_images(ws, prompt)
   ws.close()
 
-  data = images['9']
+  data = images['9'][0]
   b64_data = base64.b64encode(data).decode('utf-8')
 
   print('b64_data', b64_data)
