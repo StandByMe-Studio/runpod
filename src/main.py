@@ -55,6 +55,8 @@ def get_images(ws, prompt):
         images_output.append(image_data)
     output_images[node_id] = images_output
 
+  print('output_images', output_images)
+
   return output_images
 
 
