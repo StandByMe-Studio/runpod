@@ -72,33 +72,51 @@ def run(prompt):
 
 
 def handle_mp4(input):
-  with open('prompt/mp4.json', 'r', encoding='utf-8') as f:
-    prompt = json.load(f)
-  prompt['6']['inputs']['text'] = input['prompt']
+  try:
+    with open('prompt/mp4.json', 'r', encoding='utf-8') as f:
+      prompt = json.load(f)
+    prompt['6']['inputs']['text'] = input['prompt']
 
-  image_bytes = util.b64_to_bytes(input['image'])
-  file_id = str(uuid.uuid4())
-  file_name = f'{file_id}.png'
-  with open(f'/workspace/ComfyUI/input/{file_name}', 'wb') as f:
-    f.write(image_bytes)
-  prompt['52']['inputs']['image'] = file_name
-  print('save input image', file_name)
+    image_bytes = util.b64_to_bytes(input['image'])
+    file_id = str(uuid.uuid4())
+    file_name = f'{file_id}.png'
+    with open(f'/workspace/ComfyUI/input/{file_name}', 'wb') as f:
+      f.write(image_bytes)
+    prompt['52']['inputs']['image'] = file_name
+    print('save input image', file_name)
 
-  output = run(prompt)
-  return {
-    'image': util.bytes_to_b64(output['28'][0])
-  }
+    output = run(prompt)
+    return {
+      'mode': 'mp4',
+      'success': True,
+      'image': util.bytes_to_b64(output['28'][0])
+    }
+  except Exception as ex:
+    return {
+      'mode': 'mp4',
+      'success': False,
+      'error': str(ex),
+    }
 
 
 def handle_sample(input):
-  with open('prompt/sample.json', 'r', encoding='utf-8') as f:
-    prompt = json.load(f)
-  prompt['6']['inputs']['text'] = input['prompt']
-  
-  output = run(prompt)
-  return {
-    'image': util.bytes_to_b64(output['9'][0])
-  }
+  try:
+    with open('prompt/sample.json', 'r', encoding='utf-8') as f:
+      prompt = json.load(f)
+    prompt['6']['inputs']['text'] = input['prompt']
+    
+    output = run(prompt)
+    return {
+      'mode': 'sample',
+      'success': True,
+      'image': util.bytes_to_b64(output['9'][0])
+    }
+  except Exception as ex:
+    return {
+      'mode': 'sample',
+      'success': False,
+      'error': str(ex),
+    }
 
 
 def handler(job):
