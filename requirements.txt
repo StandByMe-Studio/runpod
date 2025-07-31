@@ -1,2 +1,2 @@
 runpod
-websocket
+websocket-client
