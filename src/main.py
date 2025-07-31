@@ -103,9 +103,10 @@ def handle_sample(input):
 
 def handler(job):
   input = job['input']
-  if input['prompt_id'] == 'sample':
+  print('handle job', input['mode'])
+  if input['mode'] == 'sample':
     return handle_sample(input)
-  elif input['prompt_id'] == 'mp4':
+  elif input['mode'] == 'mp4':
     return handle_mp4(input)
   else:
     return {'error': 'Invalid prompt id'}
