@@ -82,6 +82,7 @@ def handle_mp4(input):
   with open(f'/workspace/ComfyUI/input/{file_name}', 'wb') as f:
     f.write(image_bytes)
   prompt['52']['inputs']['image'] = file_name
+  print('save input image', file_name)
 
   output = run(prompt)
   return {
