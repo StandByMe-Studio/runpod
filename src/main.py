@@ -85,7 +85,7 @@ def handle_mp4(input):
 
   output = run(prompt)
   return {
-    'output': util.bytes_to_b64(output['28'][0])
+    'image': util.bytes_to_b64(output['28'][0])
   }
 
 
@@ -96,7 +96,7 @@ def handle_sample(input):
   
   output = run(prompt)
   return {
-    'output': util.bytes_to_b64(output['9'][0])
+    'image': util.bytes_to_b64(output['9'][0])
   }
 
 
