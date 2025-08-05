@@ -14,8 +14,8 @@ headers = {
   "content-type": "application/json"
 }
 
-endpoint_id = 'zniyke51ptmvr1'
-# endpoint_id = '11ne2899jkjm5y'
+# endpoint_id = 'zniyke51ptmvr1'
+endpoint_id = 'g894rwjtg8i29l'
 
 
 def webp_to_mp4(webp_file, mp4_file):
@@ -62,12 +62,13 @@ def run(mode):
     return
 
   url = f"https://api.runpod.ai/v2/{endpoint_id}/run"
+  print('url', url, 'payload', payload)
   response = requests.post(url, headers=headers, json=payload)
   print(response.json())
   request_id = response.json()['id']
   while True:
     if query(request_id): break
-    time.sleep(5)
+    time.sleep(10)
 
   end_at = int(time.time())
   print('start_at', datetime.fromtimestamp(start_at).strftime('%Y-%m-%d %H:%M:%S'))
