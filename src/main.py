@@ -46,10 +46,10 @@ def get_images(ws, prompt, client_id):
       continue #previews are binary data
 
   history = get_history(prompt_id)[prompt_id]
-  # print('history', len(history['outputs']))
+  print('history', len(history['outputs']))
   for node_id in history['outputs']:
     node_output = history['outputs'][node_id]
-    # print('node_id', node_id, 'node_output', node_output)
+    print('node_id', node_id, 'node_output', node_output)
     images_output = []
     if 'images' in node_output:
       for image in node_output['images']:
@@ -73,7 +73,8 @@ def run(prompt):
 
 def handle_mp4(input):
   try:
-    with open('prompt/mp4-new.json', 'r', encoding='utf-8') as f:
+    prompt_name = input['prompt_name']
+    with open(f'prompt/{prompt_name}.json', 'r', encoding='utf-8') as f:
       prompt = json.load(f)
     prompt['6']['inputs']['text'] = input['prompt']
 
@@ -84,7 +85,7 @@ def handle_mp4(input):
       f.write(image_bytes)
     # prompt['52']['inputs']['image'] = file_name
     prompt['62']['inputs']['image'] = file_name
-    # print('save input image', file_name)
+    print('save input image', file_name)
 
     output = run(prompt)
     return {
@@ -122,7 +123,7 @@ def handle_sample(input):
 
 def handler(job):
   input = job['input']
-  # print('handle job', input['mode'])
+  print('handle job', input['mode'])
   if input['mode'] == 'sample':
     return handle_sample(input)
   elif input['mode'] == 'mp4':
