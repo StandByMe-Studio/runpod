@@ -91,9 +91,10 @@ def handle_mp4(input):
     return {
       'mode': 'mp4',
       'success': True,
-      'image': util.bytes_to_b64(output['28'][0])
+      'image': util.bytes_to_b64(output['61'][0])
     }
   except Exception as ex:
+    print('handle mp4', 'ex', ex)
     return {
       'mode': 'mp4',
       'success': False,
