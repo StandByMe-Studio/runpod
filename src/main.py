@@ -73,8 +73,8 @@ def run(prompt):
 
 def handle_mp4(input):
   try:
-    prompt_name = input['prompt_name']
-    with open(f'prompt/{prompt_name}.json', 'r', encoding='utf-8') as f:
+    workflow = input['workflow']
+    with open(f'prompt/{workflow}.json', 'r', encoding='utf-8') as f:
       prompt = json.load(f)
     prompt['6']['inputs']['text'] = input['prompt']
 
@@ -83,7 +83,6 @@ def handle_mp4(input):
     file_name = f'{file_id}.png'
     with open(f'/workspace/ComfyUI/input/{file_name}', 'wb') as f:
       f.write(image_bytes)
-    # prompt['52']['inputs']['image'] = file_name
     prompt['62']['inputs']['image'] = file_name
     print('save input image', file_name)
 
