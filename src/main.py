@@ -87,7 +87,9 @@ def handle_mp4(input):
     prompt['62']['inputs']['image'] = file_name
     print('save input image', file_name)
 
-    prompt['57']['inputs']['noise_seed'] = random.randint(0, 10000000000)
+    seed = random.randint(0, 10000000000)
+    prompt['57']['inputs']['noise_seed'] = seed
+    print('seed', seed)
 
     output = run(prompt)
     return {
