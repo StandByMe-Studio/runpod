@@ -4,6 +4,7 @@ import json
 import urllib.request
 import urllib.parse
 import runpod
+import random
 
 import util
 
@@ -85,6 +86,8 @@ def handle_mp4(input):
       f.write(image_bytes)
     prompt['62']['inputs']['image'] = file_name
     print('save input image', file_name)
+
+    prompt['57']['inputs']['noise_seed'] = random.randint(0, 10000000000)
 
     output = run(prompt)
     return {
